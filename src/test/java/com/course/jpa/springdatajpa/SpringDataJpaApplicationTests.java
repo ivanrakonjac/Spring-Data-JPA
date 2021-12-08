@@ -5,6 +5,7 @@ import com.course.jpa.springdatajpa.repository.BookRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Commit;
 import org.springframework.util.Assert;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -15,6 +16,7 @@ class SpringDataJpaApplicationTests {
 	@Autowired
 	private BookRepository bookRepository;
 
+//	@Commit
 	@Test
 	void contextLoadingTest() {
 
