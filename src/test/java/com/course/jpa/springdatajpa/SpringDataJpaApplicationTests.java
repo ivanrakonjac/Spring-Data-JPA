@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.util.Assert;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 @SpringBootTest
 class SpringDataJpaApplicationTests {
 
@@ -14,7 +16,7 @@ class SpringDataJpaApplicationTests {
 	private BookRepository bookRepository;
 
 	@Test
-	void contextLoads() {
+	void contextLoadingTest() {
 
 		Book bookDDD = new Book("Domain Driven Design", "123", "RandomHouse");
 		Book savedDDD = bookRepository.save(bookDDD);
@@ -24,7 +26,7 @@ class SpringDataJpaApplicationTests {
 		Book savedSIA = bookRepository.save(bookSIA);
 		System.out.println(savedSIA);
 
-		Assert.isTrue(bookRepository.findAll().size() == 2, "Neka knjiga se nija dodala!");
+		assertThat(bookRepository.count() == 2);
 
 	}
 
