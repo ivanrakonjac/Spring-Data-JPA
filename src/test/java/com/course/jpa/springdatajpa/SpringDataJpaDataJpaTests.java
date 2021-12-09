@@ -1,6 +1,8 @@
 package com.course.jpa.springdatajpa;
 
+import com.course.jpa.springdatajpa.domain.Author;
 import com.course.jpa.springdatajpa.domain.Book;
+import com.course.jpa.springdatajpa.repository.AuthorRepository;
 import com.course.jpa.springdatajpa.repository.BookRepository;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -20,7 +22,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class SpringDataJpaDataJpaTests{
 
     @Autowired
-    BookRepository bookRepository;
+    private BookRepository bookRepository;
+
+    @Autowired
+    private AuthorRepository authorRepository;
 
     @Commit
     @Order(1)
@@ -30,7 +35,7 @@ public class SpringDataJpaDataJpaTests{
         long countBefore = bookRepository.count();
         assertThat(countBefore).isEqualTo(0);
 
-        bookRepository.save( new Book("My new Book", "123","Laguna"));
+        bookRepository.save( new Book("My new Book", "123","Laguna", null));
 
         long countAfter = bookRepository.count();
 
@@ -43,6 +48,22 @@ public class SpringDataJpaDataJpaTests{
     void testJpaTestSpliceTransaction() {
         long countBefore = bookRepository.count();
         assertThat(countBefore).isEqualTo(1);
+    }
+
+    @Test
+    @Order(3)
+    void authorsTest() {
+
+        Author author1 = new Author("Carls", "Bukovski");
+        Author savedAuthor1 = authorRepository.save(author1);
+        System.out.println(author1);
+
+        Author author2 = new Author("Ivo", "Andric");
+        Author savedAuthor2 = authorRepository.save(author2);
+        System.out.println(author2);
+
+        assertThat(authorRepository.count() == 2);
+
     }
 
 }
