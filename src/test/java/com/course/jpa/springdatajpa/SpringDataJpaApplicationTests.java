@@ -1,8 +1,10 @@
 package com.course.jpa.springdatajpa;
 
 import com.course.jpa.springdatajpa.domain.Author;
+import com.course.jpa.springdatajpa.domain.AuthorUUID;
 import com.course.jpa.springdatajpa.domain.Book;
 import com.course.jpa.springdatajpa.repository.AuthorRepository;
+import com.course.jpa.springdatajpa.repository.AuthorUUIDRepository;
 import com.course.jpa.springdatajpa.repository.BookRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,10 @@ class SpringDataJpaApplicationTests {
 
 	@Autowired
 	private AuthorRepository authorRepository;
+
+	@Autowired
+	private AuthorUUIDRepository authorUUIDRepository;
+
 
 //	@Commit
 	@Test
@@ -49,6 +55,19 @@ class SpringDataJpaApplicationTests {
 		System.out.println(author2);
 
 		assertThat(authorRepository.count() == 2);
+
+	}
+
+	@Test
+	void authorsUUIDTest() {
+
+		AuthorUUID authorUUID1 = new AuthorUUID("Pisac1Ime", "Pisac1Prezime");
+		System.out.println(authorUUIDRepository.save(authorUUID1));
+
+		AuthorUUID authorUUID2 = new AuthorUUID("Pisac2Prezime", "Pisac2Prezime");
+		System.out.println(authorUUIDRepository.save(authorUUID2));
+
+		assertThat(authorUUIDRepository.count() == 2);
 
 	}
 }
