@@ -4,11 +4,9 @@ import com.course.jpa.springdatajpa.domain.Author;
 import com.course.jpa.springdatajpa.domain.AuthorUUID;
 import com.course.jpa.springdatajpa.domain.Book;
 import com.course.jpa.springdatajpa.domain.composite.AuthorComposite;
+import com.course.jpa.springdatajpa.domain.composite.AuthorEmbedded;
 import com.course.jpa.springdatajpa.domain.composite.NameId;
-import com.course.jpa.springdatajpa.repository.AuthorCompositeRepository;
-import com.course.jpa.springdatajpa.repository.AuthorRepository;
-import com.course.jpa.springdatajpa.repository.AuthorUUIDRepository;
-import com.course.jpa.springdatajpa.repository.BookRepository;
+import com.course.jpa.springdatajpa.repository.*;
 import org.hibernate.LazyInitializationException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Tag;
@@ -38,6 +36,8 @@ class SpringDataJpaApplicationTests {
 	@Autowired
 	private AuthorCompositeRepository authorCompositeRepository;
 
+	@Autowired
+	private AuthorEmbeddedRepository authorEmbeddedRepository;
 
 	@Rollback
 	@Test
@@ -104,6 +104,29 @@ class SpringDataJpaApplicationTests {
 		authorCompositeRepository.save(authorComposite1);
 
 		long countAfter = authorCompositeRepository.count();
+
+		Assertions.assertEquals(countAfter, countBefore);
+
+	}
+
+	@Test
+	void authorsEmbeddedTest() {
+
+		NameId nameId = new NameId("Dragan", "Markovic");
+
+		AuthorEmbedded authorEmbedded = new AuthorEmbedded();
+		authorEmbedded.setNameId(nameId);
+		authorEmbeddedRepository.save(authorEmbedded);
+
+		AuthorEmbedded fetched = authorEmbeddedRepository.getById(nameId);
+
+		Assertions.assertNotEquals(null, fetched);
+
+		long countBefore = authorEmbeddedRepository.count();
+
+		authorEmbeddedRepository.save(fetched);
+
+		long countAfter = authorEmbeddedRepository.count();
 
 		Assertions.assertEquals(countAfter, countBefore);
 
