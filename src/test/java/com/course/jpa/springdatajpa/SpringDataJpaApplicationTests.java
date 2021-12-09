@@ -6,11 +6,16 @@ import com.course.jpa.springdatajpa.domain.Book;
 import com.course.jpa.springdatajpa.repository.AuthorRepository;
 import com.course.jpa.springdatajpa.repository.AuthorUUIDRepository;
 import com.course.jpa.springdatajpa.repository.BookRepository;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.util.Assert;
+
+import javax.transaction.Transactional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -27,8 +32,9 @@ class SpringDataJpaApplicationTests {
 	private AuthorUUIDRepository authorUUIDRepository;
 
 
-//	@Commit
+	@Rollback
 	@Test
+	@Transactional
 	void booksTest() {
 
 		Book bookDDD = new Book("Domain Driven Design", "123", "RandomHouse", 1L);
@@ -39,11 +45,13 @@ class SpringDataJpaApplicationTests {
 		Book savedSIA = bookRepository.save(bookSIA);
 		System.out.println(savedSIA);
 
-		assertThat(bookRepository.count() == 2);
+		Assertions.assertEquals(2, bookRepository.count());
 
 	}
 
 	@Test
+	@Rollback
+	@Transactional
 	void authorsTest() {
 
 		Author author1 = new Author("Carls", "Bukovski");
@@ -54,7 +62,7 @@ class SpringDataJpaApplicationTests {
 		Author savedAuthor2 = authorRepository.save(author2);
 		System.out.println(author2);
 
-		assertThat(authorRepository.count() == 2);
+		Assertions.assertEquals(10, authorRepository.count());
 
 	}
 
@@ -67,7 +75,6 @@ class SpringDataJpaApplicationTests {
 		AuthorUUID authorUUID2 = new AuthorUUID("Pisac2Prezime", "Pisac2Prezime");
 		System.out.println(authorUUIDRepository.save(authorUUID2));
 
-		assertThat(authorUUIDRepository.count() == 2);
-
+		Assertions.assertEquals(10, authorUUIDRepository.count());
 	}
 }
