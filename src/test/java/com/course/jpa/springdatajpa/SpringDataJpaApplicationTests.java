@@ -19,6 +19,8 @@ import org.springframework.util.Assert;
 
 import javax.transaction.Transactional;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
@@ -57,19 +59,29 @@ class SpringDataJpaApplicationTests {
 	}
 
 	@Test
-	@Rollback
-	@Transactional
 	void authorsTest() {
 
-		Author author1 = new Author("Carls", "Bukovski");
+		Author author1 = new Author("Carls", "Bukovski", 1920, 1994);
 		Author savedAuthor1 = authorRepository.save(author1);
 		System.out.println(author1);
 
-		Author author2 = new Author("Ivo", "Andric");
+		Author author2 = new Author("Ivo", "Andric", 1892,1975);
 		Author savedAuthor2 = authorRepository.save(author2);
 		System.out.println(author2);
 
-		Assertions.assertEquals(10, authorRepository.count());
+		Author author3 = new Author("Vladimir", "Majakovski", 1893, 1930);
+		Author savedAuthor3 = authorRepository.save(author3);
+		System.out.println(author3);
+
+		Author author4 = new Author("Danilo", "Kis", 1935,1989);
+		Author savedAuthor4 = authorRepository.save(author4);
+		System.out.println(author4);
+
+		Author author5 = new Author("Borislav", "Pekic", 1930,1992);
+		Author savedAuthor5 = authorRepository.save(author5);
+		System.out.println(author5);
+
+		Assertions.assertEquals(5, authorRepository.count());
 
 	}
 
@@ -132,5 +144,12 @@ class SpringDataJpaApplicationTests {
 
 	}
 
+	@Test
+	void authorFindByFirstNameAndLastname() {
 
+		List<Author> authorList = authorRepository.findByFirstNameAndAndLastName("Ivo", "Andric");
+
+		Assertions.assertEquals(1, authorList.size());
+
+	}
 }

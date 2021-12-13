@@ -1,6 +1,7 @@
 package com.course.jpa.springdatajpa.domain;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name="Author")
@@ -12,15 +13,24 @@ public class Author {
 
     @Column(name = "first_name")
     private String firstName;
+
     @Column(name = "last_name")
     private String lastName;
+
+    @Column(name = "born")
+    private int born;
+
+    @Column(name = "died")
+    private int died;
 
     public Author() {
     }
 
-    public Author(String firstName, String lastName) {
+    public Author(String firstName, String lastName, int born, int died) {
         this.firstName = firstName;
         this.lastName = lastName;
+        this.born = born;
+        this.died = died;
     }
 
     public String getFirstName() {
@@ -39,6 +49,22 @@ public class Author {
         this.lastName = lastName;
     }
 
+    public int getBorn() {
+        return born;
+    }
+
+    public void setBorn(int born) {
+        this.born = born;
+    }
+
+    public int getDied() {
+        return died;
+    }
+
+    public void setDied(int died) {
+        this.died = died;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -46,11 +72,20 @@ public class Author {
 
         Author author = (Author) o;
 
-        return id != null ? id.equals(author.id) : author.id == null;
+        if (born != author.born) return false;
+        if (died != author.died) return false;
+        if (!Objects.equals(id, author.id)) return false;
+        if (!Objects.equals(firstName, author.firstName)) return false;
+        return Objects.equals(lastName, author.lastName);
     }
 
     @Override
     public int hashCode() {
-        return id != null ? id.hashCode() : 0;
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
+        result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
+        result = 31 * result + born;
+        result = 31 * result + died;
+        return result;
     }
 }

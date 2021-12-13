@@ -54,11 +54,11 @@ public class SpringDataJpaDataJpaTests{
     @Order(3)
     void authorsTest() {
 
-        Author author1 = new Author("Carls", "Bukovski");
+        Author author1 = new Author("Carls", "Bukovski", 1920, 1994);
         Author savedAuthor1 = authorRepository.save(author1);
         System.out.println(author1);
 
-        Author author2 = new Author("Ivo", "Andric");
+        Author author2 = new Author("Ivo", "Andric", 1892,1975);
         Author savedAuthor2 = authorRepository.save(author2);
         System.out.println(author2);
 
