@@ -15,9 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
 import org.springframework.test.annotation.Rollback;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
-
-import javax.transaction.Transactional;
 
 import java.util.List;
 
@@ -41,16 +40,30 @@ class SpringDataJpaApplicationTests {
 	@Autowired
 	private AuthorEmbeddedRepository authorEmbeddedRepository;
 
-	@Rollback
+//	@Rollback
 	@Test
-	@Transactional
+//	@Transactional
 	void booksTest() {
 
-		Book bookDDD = new Book("Domain Driven Design", "123", "RandomHouse", 1L);
+		List<Author> authorsList = authorRepository.findByFirstNameAndAndLastName("Vladimir", "Majakovski");
+
+		Book bookDDD = Book.builder()
+				.title("Domain Driven Design")
+				.isbn("456")
+				.publisher("Oriley")
+				.author(authorsList.get(0))
+				.build();
+
 		Book savedDDD = bookRepository.save(bookDDD);
 		System.out.println(savedDDD);
 
-		Book bookSIA = new Book("Spring In Action", "456", "Oriely", 2L);
+		Book bookSIA = Book.builder()
+				.title("Spring In Action")
+				.isbn("456")
+				.publisher("Oriley")
+				.author(authorsList.get(0))
+				.build();
+
 		Book savedSIA = bookRepository.save(bookSIA);
 		System.out.println(savedSIA);
 
@@ -61,24 +74,24 @@ class SpringDataJpaApplicationTests {
 	@Test
 	void authorsTest() {
 
-		Author author1 = new Author("Carls", "Bukovski", 1920, 1994);
-		Author savedAuthor1 = authorRepository.save(author1);
+		Author author1 = Author.builder().firstName("Carls").lastName("Bukovski").born(1920).died(1994).build();
+		authorRepository.save(author1);
 		System.out.println(author1);
 
-		Author author2 = new Author("Ivo", "Andric", 1892,1975);
-		Author savedAuthor2 = authorRepository.save(author2);
+		Author author2 = Author.builder().firstName("Ivo").lastName("Andric").born(1892).died(1975).build();
+		authorRepository.save(author2);
 		System.out.println(author2);
 
-		Author author3 = new Author("Vladimir", "Majakovski", 1893, 1930);
-		Author savedAuthor3 = authorRepository.save(author3);
+		Author author3 = Author.builder().firstName("Vladimir").lastName("Majakovski").born(1893).died(1930).build();
+		authorRepository.save(author3);
 		System.out.println(author3);
 
-		Author author4 = new Author("Danilo", "Kis", 1935,1989);
-		Author savedAuthor4 = authorRepository.save(author4);
+		Author author4 = Author.builder().firstName("Danilo").lastName("Kis").born(1935).died(1989).build();
+		authorRepository.save(author4);
 		System.out.println(author4);
 
-		Author author5 = new Author("Borislav", "Pekic", 1930,1992);
-		Author savedAuthor5 = authorRepository.save(author5);
+		Author author5 = Author.builder().firstName("Borislav").lastName("Pekic").born(1930).died(1992).build();
+		authorRepository.save(author5);
 		System.out.println(author5);
 
 		Assertions.assertEquals(5, authorRepository.count());
@@ -124,7 +137,7 @@ class SpringDataJpaApplicationTests {
 	@Test
 	void authorsEmbeddedTest() {
 
-		NameId nameId = new NameId("Dragan", "Markovic");
+		NameId nameId = new NameId("Pisac", "Pisac");
 
 		AuthorEmbedded authorEmbedded = new AuthorEmbedded();
 		authorEmbedded.setNameId(nameId);
@@ -146,10 +159,18 @@ class SpringDataJpaApplicationTests {
 
 	@Test
 	void authorFindByFirstNameAndLastname() {
-
 		List<Author> authorList = authorRepository.findByFirstNameAndAndLastName("Ivo", "Andric");
-
 		Assertions.assertEquals(1, authorList.size());
+	}
+
+	@Test
+	@Transactional
+	void fetchTest() {
+		List<Book> bookList = bookRepository.findAll();
+
+		for (Book b: bookList) {
+			System.out.println(b.getAuthor());
+		}
 
 	}
 }

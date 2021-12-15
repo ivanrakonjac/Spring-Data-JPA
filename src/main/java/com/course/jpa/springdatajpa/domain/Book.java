@@ -1,9 +1,17 @@
 package com.course.jpa.springdatajpa.domain;
 
-import javax.persistence.*;
-import java.util.Objects;
+import lombok.*;
 
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
+
+@Data
 @Entity
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name="Book")
 public class Book {
 
@@ -15,74 +23,9 @@ public class Book {
     private String isbn;
     private String publisher;
 
-    @Column(name = "author_id")
-    private Long authorId;
 
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "author_id", nullable = false)
+    private Author author;
 
-    public Book() {
-    }
-
-    public Book(String title, String isbn, String publisher, Long authorId) {
-        this.title = title;
-        this.isbn = isbn;
-        this.publisher = publisher;
-        this.authorId = authorId;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Book book = (Book) o;
-
-        return Objects.equals(id, book.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return id != null ? id.hashCode() : 0;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getIsbn() {
-        return isbn;
-    }
-
-    public void setIsbn(String isbn) {
-        this.isbn = isbn;
-    }
-
-    public String getPublisher() {
-        return publisher;
-    }
-
-    public void setPublisher(String publisher) {
-        this.publisher = publisher;
-    }
-
-    public Long getAuthorId() {
-        return authorId;
-    }
-
-    public void setAuthorId(Long authorId) {
-        this.authorId = authorId;
-    }
-
-    @Override
-    public String toString() {
-        return "Book{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", isbn='" + isbn + '\'' +
-                ", publisher='" + publisher + '\'' +
-                '}';
-    }
 }
