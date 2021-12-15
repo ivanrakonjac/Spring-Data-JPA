@@ -28,4 +28,8 @@ public class Book {
     @JoinColumn(name = "author_id", nullable = false)
     private Author author;
 
+    @EqualsAndHashCode.Exclude
+    @OneToMany(mappedBy = "book") // Jer jedna knjiga moze imati mnogo reviewa
+    private Set<Review> reviews = new HashSet<>();
+
 }
