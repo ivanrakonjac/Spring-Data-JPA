@@ -8,6 +8,7 @@ import com.course.jpa.springdatajpa.domain.composite.AuthorComposite;
 import com.course.jpa.springdatajpa.domain.composite.AuthorEmbedded;
 import com.course.jpa.springdatajpa.domain.composite.NameId;
 import com.course.jpa.springdatajpa.repository.*;
+import com.course.jpa.springdatajpa.service.AuthorService;
 import org.hibernate.LazyInitializationException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Tag;
@@ -45,6 +46,9 @@ class SpringDataJpaApplicationTests {
 	@Autowired
 	private ReviewRepository reviewRepository;
 
+	@Autowired
+	private AuthorService authorService;
+
 	@Test
 	void authorsTest() {
 
@@ -72,12 +76,12 @@ class SpringDataJpaApplicationTests {
 
 	}
 
-//	@Rollback
+	@Rollback(value = false)
 	@Test
-//	@Transactional
+	@Transactional
 	void booksTest() {
 
-		List<Author> authorsList = authorRepository.findByFirstNameAndAndLastName("Vladimir", "Majakovski");
+		List<Author> authorsList = authorRepository.findByFirstNameAndAndLastName("Ivo", "Andric");
 
 		Book bookDDD = Book.builder()
 				.title("Domain Driven Design")
@@ -174,7 +178,10 @@ class SpringDataJpaApplicationTests {
 		List<Book> bookList = bookRepository.findAll();
 
 		for (Book b: bookList) {
-			System.out.println(b.getAuthor());
+			System.out.println(b);
+			for (Author a: b.getAuthors()) {
+				System.out.println("\t" + a);
+			}
 		}
 
 	}
@@ -199,9 +206,24 @@ class SpringDataJpaApplicationTests {
 		List<Review> reviewList = reviewRepository.findAll();
 
 		for (Review r: reviewList) {
-			System.out.println(r.getBook().getAuthor());
+			System.out.println(r.getBook());
 		}
 
 	}
+
+	@Test
+//	@Transactional
+//	@Rollback(value = false)
+	void authorBookDeleteTest() {
+//		List<Book> bookList = bookRepository.findAll();
+//		Book book = bookList.get(0);
+//		bookRepository.delete(book);
+
+
+		authorService.delete(7L);
+	}
+
+
+
 
 }

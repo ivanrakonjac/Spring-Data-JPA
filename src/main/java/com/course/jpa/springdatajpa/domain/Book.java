@@ -24,12 +24,21 @@ public class Book {
     private String publisher;
 
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "author_id", nullable = false)
-    private Author author;
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {
+            CascadeType.DETACH,
+            CascadeType.MERGE,
+            CascadeType.REFRESH,
+            CascadeType.PERSIST
+    })
+    @JoinTable(name = "books_authors",
+            joinColumns = {@JoinColumn(name = "book_id")},
+            inverseJoinColumns = {@JoinColumn(name = "author_id")}
+    )
+    @Singular
+    private Set<Author> authors = new HashSet<>();
 
     @EqualsAndHashCode.Exclude
-    @OneToMany(mappedBy = "book") // Jer jedna knjiga moze imati mnogo reviewa
-    private Set<Review> reviews = new HashSet<>();
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "book") // Jer jedna knjiga moze imati mnogo reviewa
+    private final Set<Review> reviews = new HashSet<>();
 
 }

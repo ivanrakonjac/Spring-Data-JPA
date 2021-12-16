@@ -35,7 +35,13 @@ public class Author {
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<Book> myBooks = new HashSet<>();
+    @ManyToMany(mappedBy = "authors", fetch = FetchType.LAZY, cascade = {
+//            CascadeType.DETACH,
+//            CascadeType.MERGE,
+//            CascadeType.REFRESH,
+            CascadeType.ALL
+    })
+    @Singular
+    private final Set<Book> books = new HashSet<>();
 
 }
