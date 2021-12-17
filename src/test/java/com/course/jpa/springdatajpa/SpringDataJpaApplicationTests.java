@@ -1,9 +1,6 @@
 package com.course.jpa.springdatajpa;
 
-import com.course.jpa.springdatajpa.domain.Author;
-import com.course.jpa.springdatajpa.domain.AuthorUUID;
-import com.course.jpa.springdatajpa.domain.Book;
-import com.course.jpa.springdatajpa.domain.Review;
+import com.course.jpa.springdatajpa.domain.*;
 import com.course.jpa.springdatajpa.domain.composite.AuthorComposite;
 import com.course.jpa.springdatajpa.domain.composite.AuthorEmbedded;
 import com.course.jpa.springdatajpa.domain.composite.NameId;
@@ -48,6 +45,9 @@ class SpringDataJpaApplicationTests {
 
 	@Autowired
 	private AuthorService authorService;
+
+	@Autowired
+	private UserRepository userRepository;
 
 	@Test
 	void authorsTest() {
@@ -214,16 +214,44 @@ class SpringDataJpaApplicationTests {
 	@Test
 //	@Transactional
 //	@Rollback(value = false)
-	void authorBookDeleteTest() {
-//		List<Book> bookList = bookRepository.findAll();
-//		Book book = bookList.get(0);
-//		bookRepository.delete(book);
-
-
-		authorService.delete(7L);
+//	authorService je @Transactional
+	void transactionalContextTest() {
+		authorService.delete(5L);
 	}
 
+	@Test
+	@Transactional
+	@Rollback(value = false)
+	void authorBookDeleteTest() {
+		List<Book> bookList = bookRepository.findAll();
+		Book book = bookList.get(0);
+		bookRepository.delete(book);
+	}
 
+	@Test
+	@Transactional
+	@Rollback(value = false)
+	void reviewUserOneToOneTest() {
 
+		User user = User.builder()
+				.username("username")
+				.firstName("Ivan")
+				.lastName("Rakonjac")
+				.build();
 
+		userRepository.save(user);
+
+		Optional<Book> book = bookRepository.findById(1L);
+
+		Review review = Review.builder()
+								.text("Komentar za knjigu")
+								.book(book.get())
+								.user(user)
+								.build();
+
+		reviewRepository.save(review);
+
+		Assertions.assertEquals(1, reviewRepository.count());
+
+	}
 }

@@ -25,4 +25,8 @@ public class Review {
     @ManyToOne(fetch = FetchType.LAZY, optional = false) //Many reviews are associated with one book
     @JoinColumn(name = "book_id", nullable = false)
     private Book book;
+
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "username", nullable = false)
+    private User user;
 }
