@@ -1,13 +1,12 @@
 package com.course.jpa.springdatajpa.domain;
 
-import com.sun.istack.NotNull;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
-import lombok.experimental.Accessors;
-
 import java.util.*;
-
 import javax.persistence.*;
-import java.util.Objects;
+
 
 @Data
 @Builder
@@ -33,14 +32,10 @@ public class Author {
     @Column(name = "died")
     private int died;
 
+    @JsonIgnore
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    @ManyToMany(mappedBy = "authors", fetch = FetchType.LAZY, cascade = {
-//            CascadeType.DETACH,
-//            CascadeType.MERGE,
-//            CascadeType.REFRESH,
-            CascadeType.ALL
-    })
+    @ManyToMany(mappedBy = "authors", fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
     @Singular
     private final Set<Book> books = new HashSet<>();
 
